@@ -1,0 +1,1288 @@
+.HM 2
+.HE                                                   Preliminary_Version
+.PN
+
+   Description_of_F90/10/.
+
+   Your new F90/10/ language compiler  is used to convert your english
+language Guided Fault  Isolation programs into the internaì Flukå (t)
+F90/10/a tokenized language. 
+
+   After you have  written your programs with  a text editor, you run
+your program through the F90/10/ compiler.  To do this, at the A0/>, you
+enter "F90/10/ FILENAME.EXT" and hit your [RETURN] key.  (Note that the
+"FILENAME.EXT" is the file name containing your program to compile.
+
+   After the compile has taken place, the result of your compile gets
+placed into  a  file that  has the  same file  name but  with a  .FLK
+extention. (As with the above example, the result file  name would be
+"FILENAME.FLK").
+
+   You use the program called "IBMFLUKE" to  transfer your  .FLK file
+to the F90/10/a micro-tester. (For more information on "IBMFLUKE", read
+the section titled "How IBMFLUKE works").
+
+   Command_Syntax.
+
+   You are allowed to place  more than one  command on a  line if you
+want to, with the  exception of LABLES  and MACRO calls.  To do this,
+you may delimit your statements with the "|" character. Any code that
+follows a :REMark statement gets ignored. You should also not use any
+of the compiler directives in a "Stacked" format.
+
+   You may  place  your code  in  a "Free Form"  format, allowing any
+number of spaces and tabs within your code.
+
+   Special_Options.
+ 
+   There are many special options that you may employ in your program
+that would not be  available by using  the F90/10/a keyboard.  When the
+code gets  compiled, the  compiler takes  these options  and converts
+them into the normal F90/10/a code.
+
+   1) Binary numbers are allowed.
+   2) Ascii character equates are supported.
+   3) Macros are available.
+   4) PRINT statements are available.
+   5) Block remarks
+   6) For/Next loops are very usefull.
+   7) Symbolic programs names are allowed.
+   8) Symbolic variables are supported.
+   9) Automatic program number equates are available.
+  10/) More than one statement on a single line, (Stacked code).
+.PAŠ   For all of these special options, you will  need to read this text
+completly.  All of  the above options  are not available  through the
+normal F90/10/a keyboard and as such, are not documented  within any of
+Flukes publications.
+
+   Binary_numbers.
+
+   If you want to use a binary value in your program, you must follow
+the strict  binary  format.  You  must group  your binary  numbers in
+blocks of 8 bits. Here are some formats for binary numbers:
+
+   REG1 = (0/0/0/0/1111B)
+   REG1 = (0/0/0/0/0/0/10/B) (10/0/0/10/0/0/B)
+   REG1 = (0/0/110/0/0/1B) (10/10/0/110/B) (1110/110/0/B) (11110/0/0/0/B)
+
+   In the above examples, all  binary values are going  to be equated
+to REGister 1. The first binary value  is an 8 bit  value, the second
+is a 16 bit value, and the third is  a 32 bit binary  value. There is
+no limit on  the number  of binary  digits you  offer other  than the
+fact that the  micro-tester can  only support  a 32  bit wide numeric
+value.
+
+   You may use binary  values anywhere you want to. You  can use them
+in IF  statements as well  as any statement  that requires  a numeric
+value.
+
+   Ascii_characters.
+
+   You have the ability to equate a  REGister with the ASCII value of
+a letter. You may also use ASCII values in  IF statements, as well as
+anywhere a numeric value is required.
+
+   The format for the use of ASCII values is as follows:
+
+   REG1 = 'Y'
+   IF REG1 = 'Y' GOTO 1
+   REG1 = 'Y' AND REGE
+
+   For the  above examples, the  'Y' argument will  be converted into
+its ASCII value.  With the first example, REGister 1 will contain the
+result of the ASCII conversion. On the second  example, REGister 1 is
+compared with the ASCII  value of 'Y'  and if they are equal, control
+is jumped to label 1. In the last example,  the ASCII value of Y gets
+a logical AND done  with REGister E  and the result  gets placed into
+REGister 1.
+.PAŠ   Macro_Definitions.
+
+   If you  have a block  of code that  shows up in  your program more
+than once, you may write the code once, then give it a symbolic name.
+Now every time you use that symbolic name, the code will be inserted.
+
+   You should not have labels in your macros due to the fact that you
+would be creating a  duplicated label error if you did.  You also may
+not have a macro within your macro. 
+
+   The format for the definition of a macro is as follows:
+
+   :MACRO SYMBOLIC.MACRO.NAME
+      DISPLAY HERE I AM INSIDE MACRO $1
+      STOP | READ AAAA
+   :ENDMACRO
+
+   The above  :MACRO keyword  is the start  of the  macro.  The words
+"SYMBOLIC.MACRO.NAME" is the name of the macro.  The :ENDMACRO is the
+end of the macro. To envoke the macro, simply use the name with a ":"
+before it. Here is an example:
+
+   DISPLAY GOING TO MACRO
+   :SYMBOLIC.MACRO.NAME
+   DISPLAY WE HAVE RUN THE MACRO
+
+   The above example will display the words  "GOING TO MACRO. It will
+then  execute the  macro defined  above which  will itself  display a
+message, stop, read  address AAAA, then  return to display  the words
+"WE HAVE RUN THE MACRO".
+
+   Macro names may be as long as you want. Don't attempt to duplicate
+a macro name or the compiler will give you an error  message. You may
+use  any characters you  want with the  exception of a  space in your
+symbolic name.
+.paŠ   PRINT_Statements.
+
+   If you have a device memory mapped at an address and would like to
+send a string of characters  to the device, use  the PRINT statement.
+It  will take  an address, and a  string of characters  or words, and
+make a block of WRITE statements using that address.
+
+   The PRINT statements format looks like this:
+
+   PRINT [FC0/1] "This is the code that I want to send."
+   PRINT [VIDEO-PORT] "This data will be sent to the video."
+
+   In the above examples, the text  contained within the quotes  will
+be converted  to  ASCII, and  the result written  to address  FC0/1 or
+address VIDEO-PORT one at a time until all characters are sent.
+
+   You must inclose your address with the [] characters, and the text
+you want to send must be inclosed in quotation marks.  Note also that
+you must program your device before sending it data.
+.paŠ   For/Next_Statements.
+
+   The :FOR and :NEXT  statements allow  you to  create a  section or
+block of code  that will  be  repeated  for the  number of  times you
+select. These  statements create  a forward  counter and  a backwards
+counter, a label, and a conditional branch statement.
+
+   The format for the :FOR and :NEXT statements look like this:
+
+   :FOR REG1 = 1 TO 10/ AT 1
+       DISPLAY HERE WE ARE WITHIN A LOOP $1
+       STOP
+   :NEXT
+
+   The above code will look like this after it has compiled:
+   REG1 = 1
+   REGD = 10/
+   LABEL 1
+   DISPLAY HERE WE ARE WITHIN A LOOP $1
+   STOP
+   INCREMENT REG1
+   DECREMENT REGD
+   IF REGD > 0/ GOTO 1
+
+   Note that you offer the register that will be used for the forward
+counter, the starting value, the ending value, and the  label number.
+The compiler will use  REGD as the backwards counter. If  you attempt
+to use REGD as your forwards counter the compiler will  abort with an
+error message.
+
+   You may use variables  as your  starting and ending count  and you
+may also use a variable as your label number.
+
+   :FOR REG2 = STARTING.COUNTER TO ENDING.COUNTER AT LOOP.LABEL
+      DISPLAY HERE WE ARE WITHIN A LOOP $1
+      STOP
+   :END
+.PAŠ   Don't offer a lable which has already been used. If you attempt to
+do so, the compiler will abort with an error message  unless you have
+offered the duplicated label in  the form of a variable  name. If you
+do this, the error  will show  up when  you move  the program  to the
+micro-tester and try to run it.
+
+   Symbolic_Program_Names.
+
+   You may use a symbolic  name for your programs.  To do  this, your
+compiler has the :EQUATE command. The format for assigning a symbolic
+name to a program module is as follows:
+
+   :EQUATE MAIN_ENTRY_POINT AS 0/
+   :EQUATE OFFER_THE_MENU AS 1
+   :EQUATE READ_THE_PROBE AS 2
+   :EQUATE DISPLAY_PROBE_RESULT AS 3
+
+   Your symbolic  names may be  any length, containing  any character
+you wish except a space. If you define a symbolic name  that has been
+defined already, a duplicated  program name error is  offered and the
+compile will abort.
+
+   When you wish to execute the  program module, you use your execute
+statement but offer it the symbolic name. You may also use the number
+if you want to. Example:
+
+   EXECUTE MAIN_ENTRY_POINT
+   EXECUTE 0/
+
+   For the above example, program module number zero will be run.
+
+   The :EQUATE command  will also  allow the automatic  sequencing of
+program numbers. For this information, read the following:
+
+   Automatic_Program_Sequencing.
+
+   When  you use  the :EQUATE command,  it is  possible to  have  the
+compiler supply the next available program module number. To do this,
+the following syntax is used with the :EQUATE command:
+
+   :EQUATE MAIN_ENTRY_POINT AS :NEXT
+   :EQUATE OFFER_THE_MENU AS :NEXT
+   :EQUATE READ_THE_PROBE AS :NEXT
+   :EQUATE DISPLAY_PROBE_RESULT AS :NEXT
+
+   With the  above examples, the ":NEXT" tells  the compiler  to find
+the next available  program number, and  equate the symbolic  name to
+it.  If  you  compile  the above  examples, main_entry_point  will be
+program module number 0/, ofer_the_menu will be one, and so on.
+.PAŠ   Take note that if you  want to skip some program numbers,  you may
+do so in the following way:
+
+   :EQUATE MAIN_ENTRY_POINT AS :NEXT
+   :EQUATE OFFER_THE_MENU AS :NEXT
+   :EQUATE READ_THE_PROBE AS 40/
+   :EQUATE DISPLAY_PROBE_RESULT AS :NEXT
+
+   In the above  example, main_entry_point will  be zero, offer_the_-
+menu will be one, read_the_probe will be 40/, and display_probe_result
+will be 41.
+
+   Symbolic_Variables.
+
+   You may assign a symbolic name  a numeric value.  Whenever you use
+the symbolic  name in  a  command,  the  value  contained  within the
+variable gets used.
+
+   You are allowed any length variable name, with any characters with
+the exception of a space. If  you attempt to  define a  symbolic name
+that has already been defined, you will get a duplicate variable name
+error and the compiler will abort.
+
+   Here are some possible syntaxes for the :VARIABLE statement:
+
+   :VARIABLE BAD_POWER_BIT = (0/10/0/0/0/0/0/B)
+   :VARIABLE STARTING.ADDRESS = 0/0/0/0/
+   :VARIABLE ENDING.ADDRESS = FFFF
+   :VARIABLE ROM-SIGNATURE-FOR-CPU-IS = 179E
+
+   Note that you may offer binary numbers  to variables, allowing you
+to mask out bits with a variable name rather than the  actual numeric
+value.
+
+   Any of the normal Fluke commands may use a symbolic variable name.
+Here are some examples of where variables may be used:
+
+   :VARIABLE BAD_POWER_SUPPLY_FOR_Z80/ = (10/0/0/0/0/0/0/B)
+   :PROGRAM 0/
+   LABEL 2
+      READ STATUS
+      REG1 = REGE AND BAD_POWER_SUPPLY_FOR_Z80/
+      IF REG1 = BAD_POWER_SUPPLY_FOR_Z80/ GOTO 1
+      DISPLAY NOT IN POWER FAIL CONDITION
+      STOP
+
+   LABEL 1
+      DISPLAY WE ARE IN POWER FAIL CONDITION
+      STOP | GOTO 2
+.PAŠ  In  the  above  sample program,  symbolic variable name BAD_POWER_-
+SUPPLY_FOR_Z80/ gets  equated to the value  80/ (hex). Program  zero is
+the start of the test program. The first thing done is  the status of
+the unit under test gets placed  into REGE with the  READ STATUS. The
+next thing done is REG1  gets equated with  REGE AND 80/.  The logical
+AND will mask out all other bits in the REGE. REG1, the result of the
+test, gets checked to  see if it  contains 80/ (hex). If  it does, the
+program jumps to label 1. If it  does not, then  there was no  bit 80/
+set in the status so we print a pass message.
+
+   If the bit was set, we go to label 1 and display the error message
+and stop. When the operator hits continue, we try again.
+
+   More_Than_One_Statement_On_A_Single_Line.
+
+   You are allowed to place more than one  statement or command  on a
+line. To do this,  delimit your statements or  commands with  the "|"
+character. You are allowed any number  of statements  on a  line with
+the exception of LABEL and macro calls. All code after a :REMark gets
+ignored so you don't want to include code after a :REMark.
+
+   Any of the commands which require a  ":" character  before it must
+also be on  its own line.  These are  the commands  that you  are not
+allowed to "Stack" commands with:
+
+   :CODE
+   :RAM
+   :ROM                  If you  stack any of  these statements
+   :I/O                  with others, the micro-tester will not
+   :EQUATE               accept your  programs. They may run to
+   :VARIABLE             a point then crash your F9010a without
+   :MACRO                warning. Don't_Stack_These!
+   :ENDMACRO
+   :REM
+   PROGRAM
+   LABEL
+   :(Macro calls)
+
+   The format for using the "|" delimiter looks something like this:
+
+LABEL 1
+   DISPLAY READING MEMORY | READ 0/ | DISPLAY RESULT WAS $E | STOP
+   DISPLAY NEXT MEMORY READ | READ 1 | DISPLAY RESULT WAS $E
+   STOP | GOTO 1
+.PAŠ   The above code will be broken down into the following code:
+
+LABEL 1
+   DISPLAY READING MEMORY
+   READ 0/
+   DISPLAY RESULT WAS $E
+   STOP
+   DISPLAY NEXT MEMORY READ
+   READ 1
+   DISPLAY RESULT WAS $E
+   STOP
+   GOTO 1
+
+   By placing more than  one statement  on a  line, your compile will
+require less disk accesses which will result  in a faster compile. In
+addition, readability of your code is greater if your layout is good.
+
+   Fluke_F90/10/a_Micro-Tester_Command_Syntax.
+
+   All of the following command are documented  in your Fluke Manuals
+and  you  should  read them  also. What  is offered  here is  a short
+description of each, and an example of its usage.
+
+ -------------------------------------------------------------------
+|								    |
+|   AND operation - Here are some of its syntaxes.		    |
+|								    |
+| REG1 = REG1 AND FF0/0/0/0/					    |
+| REG1 = FF AND REGE						    |
+|								    |
+|   The AND operation takes the value of two arguments and does a   |
+| Logical AND to them. As with the two examples, the result of the  |
+| AND gets placed into REGister 1.                                  |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Atog, Toggle-address - Here are some of its syntaxes.	    |
+|								    |
+| ATOG A5A5 1							    |
+| TOGGLE-ADDRESS A5A5 1						    |
+| TOGGLE-ADDRESS 0/10/0/ BIT_TO_TEST				    |
+| ATOG 0/10/0/ ADDRESS.BIT.SEVEN					    |
+|								    |
+|   The keywords ATOG and TOGGLE-ADDRESS may be used freely. The    |
+| first numeric you offer is the address to use. The second value   |
+| is the address bit number to toggle on and off. You may use a	    |
+| symbolic variable name for both of the numeric values.  	    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Auto-Test - Here is its syntax.				    |
+|								    |
+| AUTO-TEST							    |
+|								    |
+|   This command executes a Bus-Test, a Rom-Test, and then a Ram-   |
+| short on all of the attributes you have specified.                |
+| 								    |
+|   For more information on Bus-Test, Rom-Test, and Ram-Short,      |
+| please read the sections that follows.			    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Aux and its syntax.						    |
+|								    |
+| AUX THIS IS A STRING OF CODE THAT WILL BE PLACED INTO THE RS232   |
+| AUX DUMPING REGISTER 1: $1, AND REGISTER 2: $2		    |
+|								    |
+|   The AUX command allows the user to send words through the	    |
+| RS232 serial port on the back of the F90/10/a, and onto a printer,  |
+| screen, modem, or any other RS232 device.			    |
+|								    |
+|   You have some handshaking capability though it is rather limited|
+| in its functions. The AUX command also has the ability to send    |
+| the entire ASCII character set to the remote device.		    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Bus-Test - Here is its syntax.				    |
+|								    |
+| BUS-TEST							    |
+|								    |
+|   This command will test you address, data, status, and control   |
+| lines to see if any of them are tied low, high, or together. It   |
+| will also report on power failure, active force signals, and      |
+| active interrupt signals.                                         |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+| Compliment - Here are some of its syntaxes.			    |
+|								    |
+| REG1 = COMPLIMENT REGE					    |
+|								    |
+|   In this example, the contents of REGister E gets complimented   |
+| and the result gets placed into REGister 1. When you compliment   |
+| a numeric value, the number gets converted to binary. All the     |
+| ones get set to zeros, all the zeros gets set to ones.            |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Decrement - Here is its syntax.				    |
+|								    |
+| DECREMENT REG1						    |
+|								    |
+|   In this example, the value contained within REGister 1 gets     |
+| its value decremented, (Its value is subtracted by one). The      |
+| result of this decrementation gets place back into the original   |
+| REGister.                                                         |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Display - Here are some of its syntaxes.			    |
+|								    |
+| DISPLAY HIT CONTINUE TO START					    |
+| DISPLAY HERE IS REG1 $1					    |
+| DISPLAY WANT POWER FAIL TEST?1				    |
+|								    |
+|   The DISPLAY command allows you to display words with the LED    |
+| display on the F90/10/a. You are also able to enter the answers to  |
+| questions with the display command.				    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+| Dtog, Toggle-Data - Here are some of its syntaxes.		    |
+|								    |
+| DTOG A5A5 1							    |
+| TOGGLE-DATA A5A5 1						    |
+| TOGGLE-DATA 0/10/0/ BIT_TO_TEST				    	    |
+| DTOG 0/10/0/ DATA.BIT.SEVEN					    |
+| TOGGLE-DATA CONTROL CONTROL.BIT.SEVEN				    |
+|								    |
+|   The keywords DTOG and TOGGLE-DATA may be used freely. The first |
+| numeric you offer is the address to toggle at. The second value is|
+| the data bit to turn on and off. You may use a symbolic variable  |
+| name for both of the numeric values.                              |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Execute - Here are some of its syntaxes.			    |
+|								    |
+| EXECUTE 12							    |
+| EXECUTE READ_THE_PROBE					    |
+|								    |
+|   With the first example, the control of the program gets placed  |
+| with program module number 12. When program 12 is done, control   |
+| returns to the program module which contained the EXECUTE command.|
+| On the second example, the symbolic program name READ_THE_PROBE   |
+| is the program module number to be executed. For more information |
+| on symbolic program equates, read that section.		    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|    Goto - Here are some of its syntaxes.			    |
+|								    |
+| GOTO 7							    |
+| IF REG1 = 0/D GOTO 7						    |
+| IF REG1 AND DATA_BIT_SEVEN = DATA_BIT_SEVEN GOTO 7		    |
+|								    |
+|   The GOTO command allows you to branch to another section of     |
+| your program. It also is used as a keyword in conditional	    |
+| branches called "IF" statements. In all of the above examples,    |
+| the result of the branch will go to label seven. For the last two |
+| examples, if the condition is true, the program control will      |
+| branch to label 7. For more information on "IF" and "LABEL",      |
+| read that section. 						    |
+|								    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|    I/O-Test - Here are some of its syntaxes.			    |
+|								    |
+| I/O-TEST							    |
+| I/O-TEST FC0/0/ FC0/4 1F						    |
+| I/O-TEST IO.START IO.END IO.BITS				    |
+|								    |
+|   The I/O-TEST command will test the driveability of data lines   |
+| for the specified addresses. You may offer no address or bit	    |
+| patterns if you want to select the default I/O attributes. The    |
+| above examples show the first as using all default I/O attributes.|
+| The second example will cause the testing of bit pattern 1F       |
+| on all addresses from FC0/0/ to FC0/4.				    |
+|								    |
+|   On the third example, the starting address, ending address, and |
+| bit pattern to test are all symbolic variable names.		    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   If - Here are some of its syntaxes.				    |
+|								    |
+| IF REG1 = 1 GOTO 6						    |
+| IF REG1 = REGE GOTO 6						    |
+| IF REG1 = TEST.BIT.PATTERN GOTO 6				    |
+| IF REG1 > 0/A GOTO 7						    |
+|								    |
+|   The IF statement allows you to test the condition of any type   |
+| operation you have requested, and branch to another section of    |
+| your program if the result is equal, greater than, or not equal   |
+| to your second argument. In the above examples, REGister 1 is	    |
+| used with the second argument to test a condition. In the first   |
+| three, if REGister 1 is equal to the second argument, control of  |
+| the program jumps to label 6. In the last example, if REGister 1  |
+| is greater than 0/A, control will jump to label 7.		    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|   Increment - Here is its syntax.				    |
+|								    |
+| INCREMENT REG1						    |
+|								    |
+|   In this example, the value contained within REGister 1 gets     |
+| its value incremented, (Its value is added by one). The    	    |
+| result of this addition gets place back into the original         |
+| REGister.                                                         |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Label - Here are some if its syntaxes.			    |
+|								    |
+| LABEL 1							    |
+| LABEL A							    |
+|								    |
+|   The label command allows you to place "Entry Points", within    |
+| your code, to use at jump points for your GOTO statements. You are|
+| allowed 16 labels, numbered from 0/ to F. You are not required to  |
+| use them  in order, and you may skip a number if you like.        |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Learn - Here are some of its syntaxes.			    |
+|								    |
+| LEARN 							    |
+| LEARN 0/0/0/0/ FFFF						    |
+| LEARN STARTING.ADDRESS ENDING.ADDRESS				    |
+|								    |
+|   The LEARN command will enter into your unit under test and see  |
+| where RAM, ROM, and I/O reside. If you don't offer a starting and |
+| ending address, the area of memory that will be looked at will    |
+| be determined by your test pod. The default is all directly	    |
+| accessible memory.						    |
+|								    |
+|   The result of your learn gets placed into the "Attributes"      |
+| section of the micro-tester. To view the results, use your "VIEW" |
+| keys. (Read "VIEW" outlined later).				    |
+|								    |
+|   When done, any ROM it finds get a signature created for it. This|
+| signature gets placed in with the attributes. If any I/O was	    |
+| located, the bits that were found to be driveable are also placed |
+| in with the attributes.					    |
+|								    |
+|   When an attribute has been stored in the micro-tester, it	    |
+| becomes a default value for I/O-TEST, RAM-SHORT, RAM-LONG, and    |
+| ROM-TEST.							    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+| 								    |
+|   Loop - Here are some of its syntaxes.			    |
+|								    |
+| READ 0/ LOOP							    |
+| READ MEMORY.ADDRESS LOOP					    |
+| WRITE 10/A5 12 LOOP						    |
+| TOGGLE-ADDRESS A5AA 1F LOOP					    |
+|								    |
+|   The LOOP command will cause the execution of the command it	    |
+| gets placed next to until the operator hits the CONTINUE key on   |
+| the F90/10/a keyboard. While the micro-tester is looping, the 	    |
+| "LOOPING" light will be flashing on the micro-tester.		    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Or - Here are some of its syntaxes.				    |
+|								    |
+| REG1 = REG2 OR REG3						    |
+| REG1 = 0/F OR REGE						    |
+| REG1 = REGE OR F0/						    |
+| IF REG1 OR REG2 = 0/F GOTO 7					    |
+|								    |
+|   The OR statement does a logical OR on the two arguments you     |
+| offer, and places the result into the destination REGister, except|
+| in the last example where the result of the OR gets equated to    |
+| the number 0/F and program control jumps to label 7 if true.	    |
+|								    |
+|   The OR command allows you to set bits on within REGisters.      |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Probe, Read-Probe - Here are its syntaxes.			    |
+|								    |
+| PROBE								    |
+| READ-PROBE							    |
+|								    |
+|   When the PROBE or READ-PROBE command gets executed, the micro-  |
+| tester will read the status of the probe tip and place the result |
+| of the read into REGister 0/. Depending on what was at the end of  |
+| the probe, and what the HIGH and LOW switches were locked to,     |
+| REGister 0/ will contain a 32 bit number which can be checked for  |
+| any condition.					   	    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Ram-Long - Here are some of its syntaxes.			    |
+|								    |
+| RAM-LONG							    |
+| RAM-LONG 0/0/0/0/ FFFF					            |
+| RAM-LONG STARTING.ADDRESS ENDING.ADDRESS			    |
+|								    |
+|   The RAM-LONG test will execute Flukes built-in ram test on the  |
+| addresses given. If you don't offer a starting and ending address,|
+| the RAM-LONG test will take the default attributes for RAM and    |
+| use them for the starting and ending address.			    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Ram-Short - Here are some of its syntaxes.			    |
+|								    |
+| RAM-SHORT							    |
+| RAM-SHORT 0/0/0/0/ FFFF					            |
+| RAM-SHORT STARTING.ADDRESS ENDING.ADDRESS			    |
+|								    |
+|   The RAM-SHORT test will execute Flukes built-in ram test on the |
+| addresses given. If you don't offer a starting and ending address,|
+| the RAM-SHORT test will take the default attributes for RAM and   |
+| use them for the starting and ending address.			    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Ramp - Here are some of its syntaxes.			    |
+|								    |
+| RAMP AAAA							    |
+| RAMP ADDRESS.TO.RAMP						    |
+|								    |
+|   The RAMP command does a series of writes to the offered address |
+| starting with all data bits turned off, incrementing the write    |
+| value forwards in binary until all data bits are turned on.	    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Read, Read Status - Here are some of its syntaxes.		    |
+|								    |
+| READ A5A5							    |
+| READ STATUS							    |
+| READ TEST.ADDRESS						    |
+|								    |
+|   The READ command will enter the unit under tests' memory at the |
+| offered address, and place the contents of that memory into	    |
+| REGister E. If you specify "STATUS" as the address, the status    |
+| of the unit under test is returned in REGister E. For more data on|
+| the "STATUS" lines of your test pod, read the stickers on the     |
+| front of your test pod.					    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   REGisters - Here are what they are.				    |
+|               Here, also, is what they do.                        |
+|								    |
+|   There are 16 internal 32 bit registers. They are used to hold   |
+| temporary values. Half of these registers are dedicated to the    |
+| storage of various things. All 16 registers may be used by the    |
+| programmer, but the dedicated registers will have their values    |
+| changed by the micro-tester when various tests are done.	    |
+|								    |
+|                           Flukes Registers			    |
+| Type of   | Reg  |                                                |
+| register  | num  | Function                                       |
+| ----------|------|------------------------------------------------
+| Dedicated | REGA | Stores a bit mask specified by the programmer. |
+|           |      | Also, if the UUT I/O address  descriptors are  |
+|           |      | invoked as default values when the I/O test is |
+|	    |	   | performed, the  bit mask specified by the last |
+|	    |      | I/O address descriptor is stored in Register A.|
+|	    |      | SO  WHEN YOU  REQUEST AN I/O TEST ON THE UUT,  |
+|           |      | YOU MUST OFFER THE BITS THAT ARE DRIVEABLE FOR |
+|           |      | THE  MEMORY ADDRESS OR PORT ASSIGNMENT OF THE  |
+|           |      | I/O DEVICE. THIS BIT PATTERN YOU OFFER GETS    |
+|           |      | STORED INTO REGA.				    |
+|           |      |                                                |
+| Dedicated | REGB | Stores the last ROM signature as specified by  |
+|           |      | the programmer. Also, if the UUT ROM address   |
+|           |      | descriptors are invoked as default values when |
+|           |      | ROM test is performed, the ROM signature       |
+|           |      | specified by the last ROM address descriptor is|
+|           |      | stored in Register B. SO IF YOU REQUEST A ROM  |
+|           |      | TEST, THE SIGNATURE THAT YOU OFFERED GETS      |
+|           |      | STORED INTO REGB. THIS SIGNATURE WOULD THEN BE |
+|           |      | THE DEFAULT SIGNATURE FOR MORE ROM TESTS LATER.|
+|           |      |                                                |
+| Dedicated | REGC | Stores the last status/control information     |
+|           |      | specified by the programmer for the Write      |
+|           |      | Control or Toggle Data Control functions, or   |
+|           |      | generated by the F90/10/a during performance of  |
+|           |      | the Read Status Function. SO WHEN A WRITE      |
+|           |      | CONTROL OR TOGGLE DATA CONTROL FUNCTION GETS   |
+|           |      | REQUESTED, YOU MUST OFFER THE BIT PATTERN FOR  |
+|           |      | THE TEST. THIS BIT PATTERN GETS PLACED INTO    |
+|           |      | REGC AND WILL BE USED FOR THE DEFAULT PATTERN  |
+|           |      | FOR MORE WRITE CONTROL OR TOGGLE DATA CONTROL  |
+|           |      | FUNCTIONS LATER.                               |
+|           |      |                                                |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+| Dedicated | REGD | Stores the last bit number specified by the    |
+|           |      | programmer for the toggle address, Toggle data,|
+|           |      | or Toggle Control functions. SO WHEN A TOGGLE  |
+|           |      | DATA OR A TOGGLE CONTROL FUNCTION GETS         |
+|           |      | REQUESTED, YOU MUST OFFER THE BIT NUMBER THAT  |
+|           |      | IS TO BE TOGGLED. THIS BIT PATTERN GETS STORED |
+|           |      | IN REGD AND WILL BE USED FOR THE DEFAULT BIT   |
+|           |      | PATTERN FOR MORE TOGGLE ADDRESS/TOGGLE DATA    |
+|           |      | FUNCTION REQUESTS. THE FOR/NEXT/STEP STATEMENT |
+|           |      | ALSO USES THIS REGISTER AS A COUNTER, SO YOU   |
+|           |      | DON'T WANT TO USE THIS REGISTER INSIDE OF A    |
+|           |      | FOR/NEXT/STEP LOOP.                            |
+|           |      |                                                |
+| Dedicated | REGE | Stores the last data specified by the          |
+|           |      | programmer or generated by the F90/10/a during   |
+|           |      | an operation. SO WHEN A READ FROM A MEMORY     |
+|           |      | LOCATION IS REQUESTED, THE RESULT OF THE READ, |
+|           |      | THAT IS, THE DATA VALUE THAT WAS IN THE MEMORY |
+|           |      | LOCATION REQUESTED, GETS PLACED INTO REGISTER E|
+|           |      |                                                |
+| Dedicated | REGF | Stores the last address specified by the       |
+|           |      | programmer or generated by the F90/10/a during an|
+|           |      | operation involving the interface pod. SO IF   |
+|           |      | YOU REQUEST A READ OR A WRITE OR ANY OTHER     |
+|           |      | FUNCTION THAT REQUIRED AN ADDRESS, THE ADDRESS |
+|           |      | YOU USED GETS STORED INTO REGF.                |
+|           |      |                                                |
+| Dedicated | REG0/ | Store data accumulated during the Read Probe   |
+|           |      | Operation. SO WHEN YOU READ THE PROBE WITH THE |
+|           |      | READ-PROBE FUNCTION, THE RESULT OF THE READ-   |
+|           |      | PROBE FUNCTION GETS PLACED INTO REG0/. THIS     |
+|           |      | VALUE IS A 32 BIT VALUE. DEPENDING  ON IF YOUR |
+|           |      | SYNC-REQUEST IS FREE RUNNING, ADDRESS SYNC, OR |
+|           |      | DATA SYNC, THIS REGISTER WILL CONTAIN A VALUE  |
+|           |      | WHICH WILL TELL YOU IF THE PROBE READ A HIGH,  |
+|           |      | LOW, FLOAT, OR CLOCKING NODE. THE PROBE CAN BE |
+|           |      | USED FOR BETTER THINGS SUCH AS TRACING ADDRESS,|
+|           |      | DATA, STATUS, & CONTROL LINES.                 |
+|           |      |                                                |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|           |      |                                                |
+| Non -     | REG1 | To be used by the programmer.		    |
+| Dedicated | REG2 | To be used by the programmer.		    |
+|           | REG3 | To be used by the programmer.		    |
+|           | REG4 | To be used by the programmer.		    |
+|           | REG5 | To be used by the programmer.		    |
+|           | REG6 | To be used by the programmer.		    |
+|           | REG7 | To be used by the programmer.		    |
+|           | REG8 | To be used by the programmer. 		    |
+|           | REG9 | To be used by the programmer. 		    |
+|           |      | THESE NINE REGISTERS DO NOT GET USED BY THE    |
+|           |      | F90/10/A IN ANY OF THE FUNCTIONS IT DOES. THEY   |
+|           |      | ARE FREE FOR THE PROGRAMMER TO USE AND YOU     |
+|           |      | SHOULD NOT WORRY ABOUT THE F90/10/A CHANGING     |
+|           |      | VALUES YOU PLACED INTO THEM. THESE REGISTERS   |
+|           |      | ARE GOOD FOR THINGS LIKE SETTING A REGISTER    |
+|           |      | WITH THE MEMORY BOARD NUMBER BEING TESTED,     |
+|           |      | SETTING ANOTHER WITH THE MEMORY ROW NUMBER,    |
+|           |      | AND STILL ANOTHER WITH THE SERIAL NUMBER OF    |
+|           |      | THE BOARD. IF THE MEMORY BOARD FAILS, THE      |
+|           |      | ROUTINE THAT REPORTS THE FAILURES WILL BE ABLE |
+|           |      | TO REPORT THE BOARD NUMBER AND THE ROW AT      |
+|           |      | FAULT. THE COLUMN NUMBER OF THE FAILURE CAN BE |
+|           |      | DETERMINED BY READING THE RESULT OF THE FAILURE|
+|           |      | OUT OF REGE (SEE ABOVE).                       |
+|           |      |                                                |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Repeat - Some of its syntaxes.			            |
+|								    |
+| READ 0/ REPEAT							    |
+| WRITE A5A5 1F REPEAT REPEAT					    |
+|								    |
+|   When the REPEAT command is used, the last command executed gets |
+| repeated. You may place about 35 repeats on a single line. If you |
+| exceed this amount, the micro-tester will give you an error.      |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Rom-Test - Some of its syntaxes.				    |
+|								    |
+| ROM-TEST							    |
+| ROM-TEST FE0/0/ FFFF 179E					    |
+|								    |
+|   The ROM-TEST command will takes the address area offered then   |
+| creates a signature for it. It will then compare the signature    |
+| with the one you offered and report if they are not equal. If you |
+| don't offer a starting address, anding address, and signature,    |
+| the ROM-TEST will use the default ROM attributes.		    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Run, Run-UUT - Some of its syntaxes.			    |
+|								    |
+| RUN								    |
+| RUN-UUT							    |
+| RUN FFFC							    |
+|								    |
+|   The RUN or RUN-UUT command allows the micro-tester to simulate  |
+| the cpu chip. If you don't offer an address to  start running at, |
+| the default starting address is used. The default starting 	    |
+| address is offered by your test pod. To change it, you are able   |
+| to use the "SET-UP" keys on the micro-tester.			    |
+|								    |
+|   For more information on :SETUP read the :SETUP section.	    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Shift-Left - Its syntaxes.				            |
+|								    |
+| SHIFT-LEFT REGE						    |
+|								    |
+|   This command will take the contents of the register name you    |
+| offer and shift the contents left one bit. 			    |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Shift-Right - Its syntaxes.				            |
+|								    |
+| SHIFT-RIGHT REGE						    |
+|								    |
+|   This command will take the contents of the register name you    |
+| offer and shift the contents right one bit. 			    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+| 								    |
+|   Stop - Its syntax.						    |
+|								    |
+| STOP								    |
+|								    |
+|   This command will cause program execution to be suspended until |
+| the operator hits the CONTINUE key on the micro-tester. While the |
+| micro-tester is in the STOP mode, the STOP light will flash.      |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|  Synchronize - Here are the allowed syntaxes			    |
+|								    |
+|     SYNCHRONIZE ADDRESS					    |
+|     SYNCHRONIZE DATA						    |
+|     SYNCHRONIZE FREE-RUN					    |
+|     SYNC ADDRESS						    |
+|     SYNC DATA							    |
+|     SYNC FREE-RUN						    |
+| 								    |
+|   The Synchronize command allows you to synchronize the logic     |
+| probe to Valid Address, Valid Data, or to Free-Running  (which is |
+| an asynchronous mode). The probe will also apply stimulus         |
+| according to the synchronous mode you select and if your          |
+| HIGH or LOW keys are locked down on the F90/10/a keyboard.          |
+|								    |
+ -------------------------------------------------------------------
+ -------------------------------------------------------------------
+|								    |
+|   Walk - Some of its syntaxes.				    |
+|								    |
+| WALK AAAA 8							    |
+| WALK WALK.ADDRESS BIT.PATTERN					    |
+| WALK A5A5 (0/0/10/0/0/0/0/B)                                             |
+|								    |
+|   The walk command will take the bit pattern you offer and write  |
+| it out to the address you offer. It will then walk the bit 	    |
+| pattern forward one bit to the left, and write it out again. It   |
+| will do this until all bits have been shifted.		    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ -------------------------------------------------------------------
+|								    |
+|   Write, Write Control - Some of its syntaxes.		    |
+|								    |
+| WRITE AAAA 1F						            |
+| WRITE CONTROL 2						    |
+|								    |
+|   The write command takes the address and data value you offer    |
+| and writes the value into the address. If you specify "CONTROL"   |
+| as your address, the control bus is selected, using the next value|
+| as the bit pattern to write to your control bus.		    |
+|								    |
+ -------------------------------------------------------------------
+.PAŠ   Compiler_Directives.
+
+:CODE		- The :CODE directive.
+
+   This directive is  used at the  top of your source code to ask the
+compiler to display the source  code as it compiles  it. If you don't
+use the :CODE directive, the object code of the compile will be shown
+during the compile.  You should  always place  this directive  at the
+first line of  every workspace you compile if  you want to  watch its
+progress.
+
+:RAM		- The :RAM directive.
+
+   The :RAM  directive is  used to  place  :RAM attributes  into your
+F90/10/a. You specify the starting address  and ending  address of RAM.
+Here are some examples of how this is used:
+
+   :RAM 0/0/0/0/ 3FFF
+   :RAM 40/0/0/ 7FFF
+   :RAM 80/0/0/ BFFF
+   :RAM C0/0/0/ FFFF
+
+   These values above are used as the default values for the RAM-LONG
+and RAM-SHORT test which  have already been described.  For more data
+on how to create default RAM locations, read your Fluke Manuals under
+"LEARN" and "VIEW".
+
+:ROM		- The :ROM directive.
+
+   The  :ROM  directive is  used to  place :ROM attributes  into your
+F90/10/a. You specify the starting address and ending address, and also
+the signature of the ROM for those addresses. You  find the signature
+of the ROM with your LEARN and VIEW keys. Here are some examples:
+
+   :ROM FE0/0/ FFFF 179E
+   :ROM E0/0/0/ EFFF 249F
+
+   These values above are used as the default values for the ROM-TEST
+which has  already  been described.  For more  information on  how to
+create default ROM locations, read  your Fluke Manuals  under "LEARN"
+and "VIEW".
+.PAŠ:I/O		- The :I/O directive.
+
+   The  :I/O directive  is used  to place  :I/O attributes  into your
+F90/10/a.  You specify  the starting  address, ending  address, and the 
+bits which are driveable for that I/O device. Here are some examples:
+
+   :I/O FC0/0/ FC0/0/ 1F
+   :I/O FC0/1 FC0/1 FF
+
+   These values above are used as the default values for the I/O-TEST
+which has already been described. For more information on how to make
+default  I/O locations,  read your  Fluke  Manuals under  "LEARN" and
+"VIEW".
+
+:REM		- The :REM directive.
+
+   Any code  or statement  which follows the  :REM directive  will be
+ignored by the compiler. It is used to allow the programmer  to place
+in-line descriptions of the  code  you  are  is  writing.  You should 
+always put many :REMarks  in your  code for  everything you  do. This
+makes it  easier for you to debug or add to your code later.  It also
+makes for better readability.
+
+   :REMarks should be used before the  start of every  program module
+to describe what the module is going to do. If you have a  section of
+code which would be hard to remember what is does,  document the code
+with :REMarks.
+
+   :REMarks don't take up any memory space in your micro-tester. They
+are removed at compile time  from the object code,  but they are left
+in your source code. (In fact, your source code is never touched).
+.PAŠ:SETUP		- The :SETUP directive
+
+   The :SETUP directive allows you to change the default SETUP param-
+eters in the F90/10/a. You are able to change the following parameters:
+
+   TRAP FOR DATA ERROR
+   TRAP FOR ADDRESS ERROR
+   TRAP FOR CONTROL ERROR
+   TRAP FOR ACTIVE FORCE LINE
+   TRAP FOR ILLEGAL ADDRESS
+   TRAP FOR BAD POWER SUPPLY
+   SET BEEP ON OR OFF
+   EXERCISE ERRORS
+
+   The syntax for these setup  parameters are given below.  Note that
+you may use the keyword  "YES" or "ON" for a true  parameter, or "NO"
+or "OFF" for a false parameter. In  the following  examples, you will
+find that both get used  freely. THESE FORMATS FOR  THE :SETUP's MUST
+BE USED EXACTLY AS THEY ARE USED HERE.
+
+:SETUP DATA ERROR YES
+:SETUP DATA ERROR ON
+:SETUP DATA ERROR NO
+:SETUP DATA ERROR OFF
+
+   For trapping DATA ERRORS. The  first two examples  will enable the
+trapping of data errors. The last two examples will disable the trap-
+ping of data errors; used when you wish to ignore data errors. 
+
+:SETUP ADDRESS ERROR YES
+:SETUP ADDRESS ERROR ON
+:SETUP ADDRESS ERROR NO
+:SETUP ADDRESS ERROR OFF
+
+   For trapping ADDRESS ERRORS.  The first  two examples  will enable
+the trapping of  address errors. The last two  examples will  disable
+the trapping of address errors; used when  you wish to ignore address
+errors.
+
+:SETUP CONTROL ERROR YES
+:SETUP CONTROL ERROR ON
+:SETUP CONTROL ERROR NO
+:SETUP CONTROL ERROR OFF
+
+   For trapping  CONTROL ERRORS.  The first two  examples will enable
+the trapping  of control errors. The  last two examples  will disable
+the trapping of control errors; used when you wish to ignore control.
+errors.
+
+   Control  errors are offered  by the F90/10/a when a control  line is
+found to be not driveable. In the case  of an  active RESET,  you may 
+wish to ignore it to start the isolation of faults.
+.PAŠ:SETUP ACTIVE FORCE YES
+:SETUP ACTIVE FORCE ON
+:SETUP ACTIVE FORCE NO
+:SETUP ACTIVE FORCE OFF
+
+   For  trapping  ACTIVE  FORCE  LINES. The  first two  examples will
+enable the trapping of active force lines. The last two examples will
+disable the  trapping of active force lines;  used when  you  want to
+ignore active force lines.
+
+   The F90/10/a will report an error if it finds  an active force line.
+It will also report on what force line was found to be active. In the
+case of an  active RESET,  you  may wish  to ignore  it to  start the
+isolation of faults.
+
+:SETUP ACTIVE INTERRUPT YES
+:SETUP ACTIVE INTERRUPT ON
+:SETUP ACTIVE INTERRUPT NO
+:SETUP ACTIVE INTERRUPT OFF
+
+   For trapping ACTIVE INTERRUPTs. The first two examples will enable
+the trapping of active interrupts. The last two examples will disable
+the  trapping  of  active interrupts;  used when  you want  to ignore 
+active interrupts.
+
+   The  F90/10/a  will report  an  error  when  an  interrupt  is being
+requested of the CPU chip the test pod is replacing. You  may wish to
+have the micro-tester ignore an interrupt  so that the  cause  of the
+interrupt may be isolated.
+
+:SETUP ILLEGAL ADDRESS YES
+:SETUP ILLEGAL ADDRESS ON
+:SETUP ILLEGAL ADDRESS NO
+:SETUP ILLEGAL ADDRESS OFF
+
+   For trapping ILLEGAL ADDRESSes. The first two examples will enable
+the trapping of illegal addresses. The last two examples will disable
+the trapping of illegal addresses. If you offer a bad address that is
+not accessable  by the micro-tester, the F90/10/a will report an error.
+You may wish to have this ignored.
+.PAŠ:SETUP BAD POWER YES
+:SETUP BAD POWER ON
+:SETUP BAD POWER NO
+:SETUP BAD POWER OFF
+
+   For trapping BAD POWER supply. The first  two examples will enable
+the trapping of bad power supply. The last two  examples will disable
+the trapping of bad power supply. There are some cases where you have
+an under-power condition, or an over-power condition. Both conditions
+should be looked into  before you attempt  to trouble-shoot, however, 
+you may ignore   the problem  to trouble-shoot  the computer.  In the 
+case where  the unit  under test  has enough  power to  operate fully 
+without causing damage to itself  or the  micro-tester and  pod, when 
+you disable  this attribute, you are able to continue testing with an
+under-voltage or an over-voltage.
+
+:SETUP BEEP YES
+:SETUP BEEP ON
+:SETUP BEEP NO
+:SETUP BEEP OFF
+
+   For turning the BEEP on or off. The first two examples will enable
+ the beep on error   transition feature. The  last two  examples will 
+disable the beep  on error transistion feature. When the micro-tester
+has a transistion from a fault to a non-fault, or from a non-fault to
+a fault, the micro-tester  will beep. In the  case of a  memory fault
+which is exibiting faults and non-faults very quickly, you may  annoy
+other people with   your constant beeping. Disable  the beep  and you
+will still be able to see that the problem continues to toggle on the
+F90/10/a's display. After the fault has been repaired, the beep feature
+can be enabled again.
+
+:SETUP EXERCISE ERRORS YES
+:SETUP EXERCISE ERRORS ON
+:SETUP EXERCISE ERRORS NO
+:SETUP EXERCISE ERRORS OFF
+
+   For  selecting  or  deselecting  EXERCISE  ERRORS. The  first two 
+examples will select the exercise of  errors. The last  two examples 
+will disable  the exercise  of errors.  You may  select the  LOOP ON 
+ERROR feature  or deselect it. When  an error is located, the F90/10/a 
+will ask you if you want to loop on it. If you never want to loop on
+an error, a disenable of this feature will  cause  the F90/10/a to not
+ask you this  question. You may, however,  hit your LOOP key  on the 
+micro-tester to loop on the error.
+
+   While  YES/ON,  NO/OFF may be used freely, it  is best to  use the
+keyword which makes the best syntax for readability.
+
+   The SETUP's  are fully  documented in your Fluke  Manuals, and you
+need  to read  them to  see the  other setup  parameters that  may be
+changed with the F90/10/a keyboard.
+
+.PAŠ   How_To_Use_Your_VIEW_Keys.
+
+   The F90/10/a keyboard has four  keys located on  the upper left-hand
+side of the keyboard which  enable you to  have the micro-tester look
+for ROM, RAM, and I/O inside of your  Unit Under Test. To display the
+information it finds, use the "VIEW" area, and hit "ROM" to view ROM,
+"RAM" to view RAM,  and "I/O" to view I/O. If more than  one block of
+ROM, RAM, or I/O was located, the "MORE"  light will light,  which is
+asking you to hit  the "MORE" key to  display the next  attribute. If
+you want to view one of the attributes you displayed before, hit your
+"PRIOR" key.
+
+   You may add or delete  attributes from the micro-tester. To remove
+an attribute, hit  the VIEW-ROM, VIEW-RAM,  or VIEW-I/O key.  Hit the
+"MORE" key until the attribute  you want to  delete is showing on the
+display. Then hit your DELETE/NO key. To add an attribute is much the
+same  way.  You  hit VIEW-ROM,  VIEW-RAM, or  VIEW-I/O, then  hit the
+"ENTER/YES" key. You  are then requested  to enter the  addresses and
+other information for that attribute.
+
+   These attributes will then be saved to the tape if you request the
+write-to-tape  function. The attributes can then  be used  as default
+values for ROM-TEST, RAM-SHORT, RAM-LONG, and I/O-TEST.
+
+   See also :ROM, :RAM, and :I/O for more information on attributes.
+
+   The use of the VIEW  and LEARN keys  are documented in  your Fluke
+Manuals, and you should read them also.
+
+.PAŠ   How_IBMFLUKE_Works.
+
+   IBMFLUKE.EXE is the  program that  comes with  this compiler which
+enables  you  to  transfer  workspaces  from  the  F90/10/a to  the IBM
+compatable, or from the IBM compatable to the F90/10/a.
+
+   You use the IBMFLUKE program  by entering  its name, and  then the
+name of the .FLK file you want to transmit. An example  of this would
+be:
+
+A0/>IBMFLUKE MEMORY     (return)
+
+   The above will run program IBMFLUKE, and the file name to use will
+be "MEMORY.FLK". (Note that the .FLK is not  required. If you attempt
+to offer a file name with  another extention  type, the  program will
+abort with an error).
+
+   The file "MEMORY.FLK" need not exist yet to run  the program unles
+you  select  an  option  which trys  to transmit  a workspace  to the 
+F90/10/a. (You can't transmit a file  that doesn't  exist). If  you are
+going to receive a workspace from  the F90/10/a, the file name  will be
+created before it accepts any data. If  the file name already exists,
+and you are going to  dump data into the existing  file, the IBMFLUKE
+program will abort with an error.
+
+   You are given the following options:
+
+   1) Transmit a workspace from the IBM compatable to the F90/10/a
+   2) Receive a workspace from the F90/10/a
+   3) Change from :COM1/:COM2 port to :COM2/:COM1 port
+   4) Transmit a workspace to the F90/10/a when called
+   5) Change the baud rate 
+
+   Option_1:_Transmit_A_Workspace_To_The_F90/10/a.
+
+   Make certain that the F90/10/a is waiting to receive the  data as it
+gets sent. Do this by hitting your AUX/IF key, READ key, and then the
+ENTER/YES key. The F90/10/a will then be in the waiting state.
+
+   When you enter the number "1" to start  this option, the workspace
+will get transmitted  the second  you hit  it. When  it is  done, the
+number of bytes  transmitted to shown,  and you  are returned  to the
+operating system.
+
+   Option_2:_Receive_A_Workspace.
+
+   When you select this option, the computer will wait for the F90/10/a
+to send its workspace. It placed the  data it receives  into the file
+name you offered  at the  A0/>.  When  the data  stops, the  file gets
+closed and you are returned to the operating system.
+.PAŠ   Option_3:_Change_Com_Port_Assignment.
+
+   If you would like to change the :COM port assignment from :COM1 to
+:COM2¬ oò froí :COM² tï :COM1,  this option will do  it. It  will ask
+you to enter 1 or  2. After you  enter the  new :COM port assignment,
+the computer will record your choice and use it the next time you use
+IBMFLUKE. You will then be returned to the menu.
+
+   Note that when you enter the new :COM  port assignment, do not hit
+your [RETURN] key.
+
+   Option_4:_Transmit_When_Called.
+
+   The  "Transmit When Called" feature allows  you to start  the file
+transfer on the computer, walk over to the micro-tester,  and request
+the start of the dump from there. To do this, you hit the AUX/IF key,
+the READ, and then the ENTER/YES key. The F90/10/a will send a request
+to send character which the computer will see and start the dump.
+
+   The screen will ask you to hit the proper keys on the F90/10/a. When
+the transmission is done, you are returned to the operating system.
+
+   Option_5:_Change_Baud_Rate.
+
+   You change the baud rate by selecting one of the following:
+
+	1 ...  30/0/ baud 
+	2 ...  60/0/ baud 
+	3 ... 120/0/ baud
+	4 ... 240/0/ baud
+	5 ... 480/0/ baud
+	6 ... 960/0/ baud
+
+   After you have entered the number for the new  baud rate you want,
+the computer will record your new baud rate, and  use it for the next
+time you use IBMFLUKE. You will then be returned to the main menu.
+
+   Note that when you enter the number  for the new baud rate, do not
+hit your [RETURN] key.
+
+   A_Word_About_File_Transfer_Speeds.
+
+   Depending on the computer you are using to talk to the F90/10/a, you
+may need to use a slower baud rate other than 960/0/. You  will need to
+test your computer with your  F90/10/a and see what is  the best "SAFE"
+speed. To do this, transmit and receive the same file back and  forth
+and see if  the micro-tester rejects  your transmission on  about the
+10/'th time you send it. This will enable  you to see if your computer
+is loosing data as the file gets worse.
+
+   IBMFLUKE has  been working at 960/0/ baud  on the Compaq (t) DeskPro
+with no data drop-outs.
+
+
+
